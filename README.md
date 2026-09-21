@@ -55,7 +55,11 @@ The network uses a **router-on-a-stick** design, where a single router interface
 ```
 
 ---
+## 📂 Packet Tracer File
 
+The complete Cisco Packet Tracer project file is available here:
+
+👉 [Download / Open Small Office Network `.pkt` file](packet-tracer/small-office-network.pkt)
 ## 🧰 Technologies & Concepts
 
 * Cisco Packet Tracer
