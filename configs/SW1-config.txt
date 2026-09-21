@@ -1,0 +1,103 @@
+! ==========================================
+! Project 1 - Small Office Network
+! Device: SW1
+! Cisco Packet Tracer
+! ==========================================
+
+enable
+configure terminal
+
+hostname SW1
+
+! Basic Security
+service password-encryption
+enable secret <configured-enable-secret>
+
+! SSH Configuration
+ip domain-name smalloffice.local
+ip ssh version 2
+username admin privilege 15 password <configured-admin-password>
+
+! VLAN 10 - USERS
+vlan 10
+ name USERS
+ exit
+
+! VLAN 20 - MANAGEMENT
+vlan 20
+ name MANAGEMENT
+ exit
+
+! Users Access Port
+interface FastEthernet0/1
+ switchport mode access
+ switchport access vlan 10
+ switchport port-security
+ no shutdown
+ exit
+
+! Management Access Port
+interface FastEthernet0/2
+ switchport mode access
+ switchport access vlan 20
+ switchport port-security
+ no shutdown
+ exit
+
+! Trunk to Router
+interface FastEthernet0/3
+ switchport mode trunk
+ no shutdown
+ exit
+
+! Unused FastEthernet Ports
+interface range FastEthernet0/4 - 24
+ shutdown
+ exit
+
+! Unused GigabitEthernet Ports
+interface range GigabitEthernet0/1 - 2
+ shutdown
+ exit
+
+! Disable VLAN 1 SVI
+interface Vlan1
+ no ip address
+ shutdown
+ exit
+
+! Management SVI
+interface Vlan20
+ ip address 192.168.20.2 255.255.255.0
+ no shutdown
+ exit
+
+! Management Default Gateway
+ip default-gateway 192.168.20.1
+
+! Security Banner
+banner motd ^C
+WARNING: Unauthorized access is prohibited.
+^C
+
+! Console Security
+line console 0
+ password <configured-console-password>
+ login
+ exit
+
+! SSH-only VTY Access
+line vty 0 4
+ login local
+ transport input ssh
+ exit
+
+line vty 5 15
+ login local
+ transport input ssh
+ exit
+
+end
+
+! Save Configuration
+copy running-config startup-config
