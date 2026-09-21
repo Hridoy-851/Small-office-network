@@ -1,0 +1,48 @@
+! ==========================================
+! Project 1 - Small Office Network
+! Device: Router
+! Cisco Packet Tracer
+! ==========================================
+
+enable
+configure terminal
+
+! Router-on-a-Stick
+interface GigabitEthernet0/0
+ no shutdown
+ exit
+
+! VLAN 10 - USERS
+interface GigabitEthernet0/0.10
+ encapsulation dot1Q 10
+ ip address 192.168.10.1 255.255.255.0
+ exit
+
+! VLAN 20 - MANAGEMENT
+interface GigabitEthernet0/0.20
+ encapsulation dot1Q 20
+ ip address 192.168.20.1 255.255.255.0
+ exit
+
+! DHCP - VLAN 10
+ip dhcp excluded-address 192.168.10.1 192.168.10.2
+
+ip dhcp pool VLAN10
+ network 192.168.10.0 255.255.255.0
+ default-router 192.168.10.1
+ dns-server 8.8.8.8
+ exit
+
+! DHCP - VLAN 20
+ip dhcp excluded-address 192.168.20.1 192.168.20.2
+
+ip dhcp pool VLAN20
+ network 192.168.20.0 255.255.255.0
+ default-router 192.168.20.1
+ dns-server 8.8.8.8
+ exit
+
+end
+
+! Save Configuration
+copy running-config startup-config
